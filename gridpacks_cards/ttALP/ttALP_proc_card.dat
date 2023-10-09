@@ -1,0 +1,14 @@
+import model Phi_simp
+
+define p = p b b~ 
+define j = j b b~
+
+define lep+ = e+ mu+ ta+
+define lep- = e- mu- ta- 
+
+define top = t t~
+define Wboson = w+ w-
+define bottom = b b~
+
+generate p p > t t~ y0
+output ttALP

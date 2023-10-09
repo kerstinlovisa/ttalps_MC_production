@@ -1,0 +1,6 @@
+
+*.log
+*.out
+*.error
+
+GridpackToMiniAOD/tmp/*
