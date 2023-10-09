@@ -64,10 +64,10 @@ echo Input gridpack: $gridpack_path
 echo Output files stored in: $output_dir/$file_collection
 
 ## GEN STEP ##
+cd $condordir
 cmsrel CMSSW_10_6_30_patch1
 cd CMSSW_10_6_30_patch1/src
 eval `scramv1 runtime -sh`
-cd $condordir
 
 echo 1_run_GEN
 cp $production_dir/Hadronizers/run_GEN_ttalp_noCopy.py $condordir

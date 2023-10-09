@@ -16,7 +16,7 @@ cd gridpacks_cards/ttALP genproductions/bin/MadGraph5_aMCatNLO
 
 ## 2. Gridpacks to MiniAOD ##
 
-All steps of the MiniAOD production in GridpackToMiniAOD/Hadronizers.
+All steps of the MiniAOD production in `GridpackToMiniAOD/Hadronizers`.
 
 ### Running GridpacksToMiniAOD: ###
 
@@ -26,7 +26,7 @@ A gridpack is needed to run, which should be in the drectory specified for `outp
 
 #### Inputs: ####
 
-1. Procedd-id = part in output name ($(PROCESS) for condor submission)
+1. Process-id = part in output name ($(PROCESS) for condor submission)
 2. Mass [GeV]
 3. Number of events to run (per job)
 4. Lifetime (ctau) [mm], __if default lifetime is wanted set this input as -1__

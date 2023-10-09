@@ -6,7 +6,7 @@ log = log/run_$(ClusterId)-$(Process).log
 output = output/run_$(ClusterId)-$(Process).out
 executable = run_GridpackToMiniAOD.sh
 #           process      mass   events    ctau
-arguments = $(Process)   0.35   10000     1e7
+arguments = $(Process)   0.35   10000     1e3
 Notification=never
 transfer_output_files = ""
 +JobFlavour           = "workday"
