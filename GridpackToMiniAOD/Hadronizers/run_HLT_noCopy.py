@@ -10,8 +10,8 @@ import FWCore.ParameterSet.Config as cms
 
 from Configuration.StandardSequences.Eras import eras
 
-channel = sys.argv[3]
-condordir = sys.argv[4]
+channel = sys.argv[2]
+condordir = sys.argv[3]
 process = cms.Process('HLT',eras.Run2_2018)
 
 # import of standard configurations
@@ -33,7 +33,7 @@ process.maxEvents = cms.untracked.PSet(
 # Input source
 process.source = cms.Source("PoolSource",
     # fileNames = cms.untracked.vstring('file:step-1.root'),
-    fileNames = cms.untracked.vstring('file:'+condordir+'/'+channel+'_DIGIPremix_{0}.root'.format(sys.argv[2])),
+    fileNames = cms.untracked.vstring('file:'+condordir+'/'+channel+'_DIGIPremix.root'),
     secondaryFileNames = cms.untracked.vstring()
 )
 
@@ -59,7 +59,7 @@ process.RAWSIMoutput = cms.OutputModule("PoolOutputModule",
     ),
     eventAutoFlushCompressedSize = cms.untracked.int32(20971520),
     # fileName = cms.untracked.string('file:step0.root'),
-    fileName = cms.untracked.string('file:'+condordir+'/'+channel+'_HLT_{0}.root'.format(sys.argv[2])),
+    fileName = cms.untracked.string('file:'+condordir+'/'+channel+'_HLT.root'),
     outputCommands = process.RAWSIMEventContent.outputCommands,
     splitLevel = cms.untracked.int32(0)
 )

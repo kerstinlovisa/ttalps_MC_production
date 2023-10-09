@@ -9,4 +9,4 @@ set param_card gpl33 0.0
 set param_card gsh1 0.0
 set param_card gsb 0.0
 set param_card lambda 1000000
-set param_card MASS 54 8.0
+set param_card MASS 54 0.35

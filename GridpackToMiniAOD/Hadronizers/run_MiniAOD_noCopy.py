@@ -10,14 +10,13 @@ import FWCore.ParameterSet.Config as cms
 from Configuration.Eras.Era_Run2_2018_cff import Run2_2018
 from Configuration.ProcessModifiers.run2_miniAOD_UL_cff import run2_miniAOD_UL
 
-process_id = sys.argv[2]
-output_path = sys.argv[3]
-file_collection = sys.argv[4]
-file_name = sys.argv[5]
-condordir = sys.argv[6]
+output_path = sys.argv[2]
+file_collection = sys.argv[3]
+file_name = sys.argv[4]
+condordir = sys.argv[5]
 
-input_file = condordir+'/'+file_name+'_RECO_'+process_id+'.root'
-output_file = output_path+'/'+file_collection+'/'+file_name+'.root'
+input_file = output_path+'/'+file_collection+'/RECO/'+file_name+'.root'
+output_file = output_path+'/'+file_collection+'/MiniAOD/'+file_name+'.root'
 
 process = cms.Process('PAT',Run2_2018,run2_miniAOD_UL)
 print('Output MiniAOD file: '+ output_file)
@@ -125,6 +124,8 @@ process.MINIAODSIMoutput = cms.OutputModule("PoolOutputModule",
     overrideInputFileSplitLevels = cms.untracked.bool(True),
     splitLevel = cms.untracked.int32(0)
 )
+# process.MINIAODSIMoutput.outputCommands.append('keep recoTrackExtras_displacedStandAloneMuons_*_*')
+process.MINIAODSIMoutput.outputCommands.append('keep *_displacedStandAloneMuons_*_*')
 
 # Additional output definition
 
