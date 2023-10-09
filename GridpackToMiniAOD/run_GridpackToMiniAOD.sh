@@ -19,14 +19,16 @@ ctau=$4
 
 
 ## PATHS ##
-production_dir=$(pwd)
 
 ## NAF
-# cmssw_dir=/afs/desy.de/user/l/lrygaard/TTALP/LLPNanoAOD/CMSSW_10_6_29/src
+# path to GridpackToMiniAOD
+# production_dir=/afs/desy.de/user/l/lrygaard/TTALP/ttalps_MC_production/GridpackToMiniAOD
 # gridpack_path=/nfs/dust/cms/user/lrygaard/ttalps_cms/gridpacks/ttALP_slc7_amd64_gcc10_CMSSW_12_4_8_tarball.tar.xz
 # output_dir=/nfs/dust/cms/user/lrygaard/ttalps_cms/LHEtoNanoAOD_output
 
 ## LXPLUS
+# path to GridpackToMiniAOD
+production_dir=/afs/cern.ch/user/l/lrygaard/TTALPs/ttalps_MC_production/GridpackToMiniAOD
 # gridpack names given as example:
 # tta_mAlp-0p35GeV.tar.xz
 gripack_name=tta_mAlp-${mass_str}GeV.tar.xz
@@ -57,7 +59,7 @@ save_allsteps=false
 
 ## Print all settings ##
 echo processId: $process_id, mass: $mass_str, events: $n_events, condordir: $condordir
-echo Directory for NanoAOD production: $production_dir
+echo Directory for GridpackToMiniAOD production: $production_dir
 echo Input gridpack: $gridpack_path
 echo Output files stored in: $output_dir/$file_collection
 
