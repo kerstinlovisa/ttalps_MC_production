@@ -84,6 +84,8 @@ mkdir log error output
 condor_submit run_GridpackToMiniAOD.sub
 ```
 
+For a larger amount of events in each run, it will take a while so make sure to check the job flavour, now default is "workday" = 3 days.
+
 #### Setting ALP decay and lifetime: ####
 
 Note this is still WORK-IN-PROGRESS.
