@@ -9,6 +9,6 @@ executable = run_GridpackToMiniAOD.sh
 arguments = $(Process)   0.35   10000     1e3
 Notification=never
 transfer_output_files = ""
-+JobFlavour           = "workday"
++JobFlavour           = "testmatch"
 
 queue 100

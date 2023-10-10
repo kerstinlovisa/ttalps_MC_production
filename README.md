@@ -10,6 +10,16 @@ More instructions given here: https://twiki.cern.ch/twiki/bin/view/CMS/QuickGuid
 ```
 git clone https://github.com/cms-sw/genproductions.git
 cp -r gridpacks_cards/ttALP genproductions/bin/MadGraph5_aMCatNLO/cards/.
+```
+
+For some reason the model Phi_simp is not found altough it is listed on the cms generators webpage. So instead, download the model Phi_simp.tar.gz from the webpage:
+
+https://cms-project-generators.web.cern.ch/cms-project-generators/
+
+and add it to the directory `gridpacks_cards/ttALP genproductions/bin/MadGraph5_aMCatNLO`.
+
+Generate gripacks for ttALP as:
+```
 cd gridpacks_cards/ttALP genproductions/bin/MadGraph5_aMCatNLO
 ./gridpack_generation.sh ttALP cards/ttALP
 ```
@@ -70,6 +80,7 @@ Set input values in `run_GridpackToMiniAOD.sub` and run
 
 ```
 cd GridpackToMiniAOD
+mkdir log error output
 condor_submit run_GridpackToMiniAOD.sub
 ```
 
