@@ -10,29 +10,30 @@ import random
 import FWCore.ParameterSet.Config as cms
 
 # INPUTS
-# [2]: process id
-# [3]: input file path 
-# [4]: channel name for output
-# [5]: condor directory path
-# [6]: #events to generate
-# [7]: ALP mass
-# [8]: ALP ctau
-process_id = sys.argv[2]
-input_file = sys.argv[3]
-channel = sys.argv[4]
-condordir = sys.argv[5]
-n_events = int("{0}".format(sys.argv[6]))
-ALP_mass = sys.argv[7] # GeV
-ALP_ctau = float(sys.argv[8]) # mm
+# [2]: input file path 
+# [3]: channel name for output
+# [4]: condor directory path
+# [5]: #events to generate
+# [6]: ALP mass
+# [7]: ALP ctau
+input_file = sys.argv[2]
+channel = sys.argv[3]
+condordir = sys.argv[4]
+n_events = int("{0}".format(sys.argv[5]))
+ALP_mass = sys.argv[6] # GeV
+ALP_ctau = float(sys.argv[7]) # mm
 
 # CALCULATING ALP WIDTH
 c = 29979245800 # speed of light in cm/s
-ALP_tau0 = ALP_ctau/c # mm/c
 hbar = 6.582119569*10**(-25) # h/2pi in GeVs
-ALP_width = hbar*c*10/(ALP_tau0) # [GeV c]
+if(ALP_ctau == 0):
+    ALP_width=0
+else:
+    ALP_width = hbar*c*10/(ALP_ctau) # [GeV]
+
 
 print("File: {0}".format(channel))
-print("mass: {0} GeV, ctau: {1} mm, tau0: {2} mm/c, width: {3} GeV".format(ALP_mass, ALP_ctau, ALP_tau0, ALP_width))
+print("mass: {0} GeV, ctau: {1} mm, width: {2} GeV".format(ALP_mass, ALP_ctau, ALP_width))
 
 from Configuration.Eras.Era_Run2_2018_cff import Run2_2018
 
@@ -103,7 +104,7 @@ process.RAWSIMoutput = cms.OutputModule("PoolOutputModule",
         filterName = cms.untracked.string('')
     ),
     eventAutoFlushCompressedSize = cms.untracked.int32(20971520),
-    fileName = cms.untracked.string('file:'+condordir+'/'+channel+'_GENSIM_{0}.root'.format(sys.argv[2])),
+    fileName = cms.untracked.string('file:'+condordir+'/'+channel+'_GENSIM.root'),
     outputCommands = process.RAWSIMEventContent.outputCommands,
     splitLevel = cms.untracked.int32(0)
 )
@@ -127,11 +128,6 @@ process.GlobalTag = GlobalTag(process.GlobalTag, '106X_upgrade2018_realistic_v4'
 
 process.generator = cms.EDFilter("Pythia8HadronizerFilter",
     PythiaParameters = cms.PSet(
-        parameterSets = cms.vstring(
-            'pythia8CommonSettings', 
-            'pythia8CP5Settings', 
-            'pythia8PSweightsSettings'
-        ),
         pythia8CP5Settings = cms.vstring(
             'Tune:pp 14', 
             'Tune:ee 7', 
@@ -154,21 +150,14 @@ process.generator = cms.EDFilter("Pythia8HadronizerFilter",
             'SigmaTotal:sigmaEl = 21.89', 
             'SigmaTotal:sigmaTot = 100.309', 
             'PDF:pSet=LHAPDF6:NNPDF31_nnlo_as_0118',
-
-            # Long-lived ALP decaying to mumu with 100% br and specified ctau
-            "54:m0 = %s" % ALP_mass,
-            "54:mWidth = %s" % ALP_width,
-            "54:oneChannel = 1 1.0 100 13 -13",
         ),
         pythia8CommonSettings = cms.vstring(
             'Tune:preferLHAPDF = 2', 
             'Main:timesAllowErrors = 10000', 
             'Check:epTolErr = 0.01', 
             'Beams:setProductionScalesFromLHEF = off', 
-            'SLHA:keepSM = on', 
-            'SLHA:minMassSM = 1000.', 
-            'ParticleDecays:limitTau0 = on', 
-            'ParticleDecays:tau0Max = 10', 
+            # 'SLHA:keepSM = on', 
+            'SLHA:minMassSM = 0.1', 
             'ParticleDecays:allowPhotonRadiation = on'
         ),
         pythia8PSweightsSettings = cms.vstring(
@@ -180,6 +169,21 @@ process.generator = cms.EDFilter("Pythia8HadronizerFilter",
             'UncertaintyBands:overSampleISR = 10.0', 
             'UncertaintyBands:FSRpTmin2Fac = 20', 
             'UncertaintyBands:ISRpTmin2Fac = 1'
+        ),
+        pythiaProcessParameters = cms.vstring(
+            'SLHA:allowUserOverride = on',
+            'ParticleDecays:limitTau0 = off', 
+            'ResonanceWidths:minWidth = 1e-30',
+            "54:mWidth = %s" % ALP_width,
+            # "54:tau0 = {0}".format(ALP_ctau),
+            "54:mayDecay = true",
+            "54:oneChannel = 1 1.0 100 13 -13"
+        ),
+        parameterSets = cms.vstring(
+            'pythia8CommonSettings', 
+            'pythia8CP5Settings', 
+            'pythia8PSweightsSettings',
+            'pythiaProcessParameters'
         )
     ),
     comEnergy = cms.double(13000.0),
@@ -188,7 +192,6 @@ process.generator = cms.EDFilter("Pythia8HadronizerFilter",
     pythiaHepMCVerbosity = cms.untracked.bool(False),
     pythiaPylistVerbosity = cms.untracked.int32(1)
 )
-
 
 process.externalLHEProducer = cms.EDProducer("ExternalLHEProducer",
     args = cms.vstring(input_file),
