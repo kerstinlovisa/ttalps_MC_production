@@ -32,33 +32,31 @@ All steps of the MiniAOD production in `GridpackToMiniAOD/Hadronizers`.
 
 #### Requirements: ####
 
-A gridpack is needed to run, which should be in the drectory specified for `output_dir` in `GridpackToMiniAOD/run_GridpackToMiniAOD.sh` (see Settings below). The name of the gridpack should be on the form: `tta_mAlp-${mass}GeV.tar.xz` (see Settings below).
+A gridpack is needed to run, which should be in the drectory specified for `output_dir` in `GridpackToMiniAOD/run_GridpackToMiniAOD.sh` (see Settings below). The name of the gridpack should be on the form: `tta_mAlp-${mass}GeV-ctau-${ctau}mm.tar.xz` (see Settings below).
 
 #### Inputs: ####
 
 1. Process-id = part in output name ($(PROCESS) for condor submission)
 2. Mass [GeV]
 3. Number of events to run (per job)
-4. Lifetime (ctau) [mm], __if default lifetime is wanted set this input as -1__
+4. Lifetime (ctau) [mm], for default lifetimes set ctau to 0
+5. save_all_steps: flag to save all root-files in each step. If `1` all intermediate root files will also be saved in the output directory. If `0` only RECO and MiniAOD root-files are saved.
 
 #### Settings ####
 
 Several paths are set in `GridpackToMiniAOD/run_GridpackToMiniAOD.sh`, all are given under PATHS in the file:
 
 * `production_dir` = local path to GridpackToMiniAOD directory (needed for condor submission)
+* `home_dir` = should be set to your home directory, needed when running on condor for root libraries that are loaded
 * `gripack_name` should be given in the form `tta_mAlp-${mass}GeV.tar.xz`, example: `tta_mAlp-0p35GeV.tar.xz`
 * `gridpack_path` = path to gridpack
 * `output_dir` = path to where output MiniAODs are stored
 
 Output MiniAOD name will be stores in the form: 
-* `tta_mAlp-${mass}GeV_ctau-{ctau}mm_nEvents-{events}.root` for set ctau (ctau!=-1)
-* `tta_mAlp-${mass}GeV_nEvents-{events}.root` for default ctau (ctau=-1)
+* `tta_mAlp-${mass}GeV_ctau-{ctau}mm_nEvents-{events}.root` for set ctau (ctau!=0)
+* `tta_mAlp-${mass}GeV_nEvents-{events}.root` for default ctau (ctau=0)
 
 Example: `tta_mAlp-0p35GeV_ctau-1e3mm_nEvents-10000.root`
-
-Other settings in `GridpackToMiniAOD/run_GridpackToMiniAOD.sh`:
-
-* `save_allsteps` set to false by default. If `true` all intermediate root files will also be saved in the output directory.
 
 #### Locally: ####
 
@@ -66,12 +64,12 @@ replace all {value} with your actual value.
 
 ```
 cd GridpackToMiniAOD
-./run_GridpackToMiniAOD.sh {process id} {mass} {number of events} {ctau}
+./run_GridpackToMiniAOD.sh {process id} {mass} {number of events} {ctau} {save_all_steps}
 ```
 
 Example:
 ```
-./run_GridpackToMiniAOD.sh 0 0.35 10000 1e3
+./run_GridpackToMiniAOD.sh 0 0.35 10000 1e3 0
 ```
 
 #### Condor submission: ####
@@ -88,10 +86,8 @@ For a larger amount of events in each run, it will take a while so make sure to 
 
 #### Setting ALP decay and lifetime: ####
 
-Note this is still WORK-IN-PROGRESS.
-
-The ALP decay and lifetime is set by pythia in Step 1 in `GridpackToMiniAOD/Hadronizers/run_GEN_ttalp_noCopy.py`. Here the decay channel is now set to only ALP to muon-antimuon pair 100%. 
+The ALP decay channels and width are set when producing the gridpacks in ttAlp_param_card.dat, but it's also set for pythia in Step 1 in `GridpackToMiniAOD/Hadronizers/run_GEN_ttalp_noCopy.py`. Here the decay channel is now set to only ALP to muon-antimuon pair 100%. 
 
 The lifetime is set by the decay width, such that `run_GEN_ttalp_noCopy.py` takes ctau [mm] as input, use it to calculate the decay width and sets the decay width which directly also updates pythias value of tau0 [mm/c].
 
-TODO: double check conversion of ctau to gamma to tau0.
+The functionality of setting default ctau might not be working, this needs to be checked!
