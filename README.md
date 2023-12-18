@@ -1,8 +1,15 @@
 # MC production for ttAlp #
 
 Two steps:
+1. Creating Gridpacks
+2. Creating MiniAODs from the Gridpaks
 
-## 1. Greate gridpacks: ##
+## Current mass/lifetime points ##
+These are the mass and lifetime points we've generated this far:
+ALP mass = 0.35 GeV (only)
+ALP lifetime = 1e0, 1e1, 1e2, 1e3, 1e5, 1e7 [mm]
+
+## 1. Create gridpacks: ##
 
 First get the genproduction repo from https://github.com/cms-sw/genproductions.
 More instructions given here: https://twiki.cern.ch/twiki/bin/view/CMS/QuickGuideMadGraph5aMCatNLO#Create_the_gridpacks_for_each_pr
