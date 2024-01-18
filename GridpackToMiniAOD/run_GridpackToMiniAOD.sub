@@ -5,10 +5,10 @@ error = error/run_$(ClusterId)-$(Process).error
 log = log/run_$(ClusterId)-$(Process).log
 output = output/run_$(ClusterId)-$(Process).out
 executable = run_GridpackToMiniAOD.sh
-#           process      mass   events    ctau
-arguments = $(Process)   0.35   10000     1e3
+#           process      mass   events    ctau   save_all_steps
+arguments = $(Process)   0.35   1000      1e2    0
 Notification=never
 transfer_output_files = ""
-+JobFlavour           = "workday"
++JobFlavour           = "longlunch"
 
 queue 100

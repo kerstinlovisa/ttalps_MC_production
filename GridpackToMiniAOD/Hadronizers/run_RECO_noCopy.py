@@ -9,8 +9,14 @@ import FWCore.ParameterSet.Config as cms
 
 from Configuration.Eras.Era_Run2_2018_cff import Run2_2018
 
-channel = sys.argv[3]
-condordir = sys.argv[4]
+output_path = sys.argv[2]
+file_collection = sys.argv[3]
+file_name = sys.argv[4]
+condordir = sys.argv[5]
+
+input_file = condordir+'/'+file_name+'_HLT.root'
+output_file = output_path+'/'+file_collection+'/RECO/'+file_name+'.root'
+
 process = cms.Process('RECO',Run2_2018)
 
 # import of standard configurations
@@ -35,8 +41,7 @@ process.maxEvents = cms.untracked.PSet(
 
 # Input source
 process.source = cms.Source("PoolSource",
-    # fileNames = cms.untracked.vstring('file:step-1.root'),
-    fileNames = cms.untracked.vstring('file:'+condordir+'/'+channel+'_HLT_{0}.root'.format(sys.argv[2])),
+    fileNames = cms.untracked.vstring('file:'+input_file),
     secondaryFileNames = cms.untracked.vstring()
 )
 
@@ -61,8 +66,7 @@ process.AODSIMoutput = cms.OutputModule("PoolOutputModule",
         filterName = cms.untracked.string('')
     ),
     eventAutoFlushCompressedSize = cms.untracked.int32(31457280),
-    # fileName = cms.untracked.string('file:step0.root'),
-    fileName = cms.untracked.string('file:'+condordir+'/'+channel+'_RECO_{0}.root'.format(sys.argv[2])),
+    fileName = cms.untracked.string('file:'+output_file),
     outputCommands = process.AODSIMEventContent.outputCommands
 )
 
